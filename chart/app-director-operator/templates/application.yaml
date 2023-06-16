@@ -1,0 +1,58 @@
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: "{{ .Release.Name }}"
+  annotations:
+    kubernetes-engine.cloud.google.com/icon: >-
+      data:image/png;base64,{{ .Files.Get "logo/logo.png" | b64enc }}
+    marketplace.cloud.google.com/deploy-info: '{"partner_id": "click-to-deploy-containers", "product_id": {{ .Chart.Name | quote }}, "partner_name": "Google Click to Deploy"}'
+  labels:
+    app.kubernetes.io/name: "{{ .Release.Name }}"
+spec:
+  descriptor:
+    type: "App Director Operator"
+    version: {{ .Values.image.tag | quote }}
+    description: |-
+      Platform engineering, simplified. App Director is an internal developer platform that helps engineering teams ship software faster on Kubernetes.
+
+      Enable developer self-service through the App Director internal developer platform. Reduce the burden on DevOps teams by automating repetitive tasks and creating golden paths. Accelerate developers through golden paths, developer self-service, lessening the cognitive load and by simplifying Kubernetes. Gain cloud native CI, CD, and many other features to allow your teams to ship features faster. Easily adopt the platform into your technology ecosystem and while minimizing disruption.
+
+       - Improve developer productivity by 25%
+       - Reduce burden on DevOps teams by 50%
+       - Kubernetes Simplified
+       - Reduce Supply Chain Security Risk
+    maintainers:
+    - name: Randoli
+      url: https://randoli.ca/
+    links:
+    - description: 'App Director Official Documentation'
+      url: https://docs.appdir.randolicloud.ca/
+    notes: |-
+      # Deploy the operator
+
+      Follow the documentation at [Getting Started](https://docs.appdir.randolicloud.ca/quick-start/introduction)
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "{{ .Release.Name }}"
+  componentKinds:
+  - group: apps/v1
+    kind: Deployment
+  - group: v1
+    kind: ConfigMap
+  - group: v1
+    kind: ServiceAccount
+  - group: v1
+    kind: Job
+  - group: v1
+    kind: Pod
+  - group: v1
+    kind: Service
+  - group: rbac.authorization.k8s.io/v1
+    kind:  ClusterRole
+  - group: rbac.authorization.k8s.io/v1
+    kind:  ClusterRoleBinding
+  - group: rbac.authorization.k8s.io/v1
+    kind:  Role
+  - group: rbac.authorization.k8s.io/v1
+    kind:  RoleBinding
+

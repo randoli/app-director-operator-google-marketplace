@@ -1,0 +1,6 @@
+{
+    "yaml.schemas": {
+        "https://json.schemastore.org/yamllint.json": "file:///home/adam/Documents/Randoli/app-director-google-cloud/chart/app-director-operator/template.yaml",
+        "https://json.schemastore.org/helmfile.json": "file:///home/adam/Documents/Randoli/app-director-google-cloud/chart/app-director-operator/templates/deployment-operator.yaml"
+    }
+}

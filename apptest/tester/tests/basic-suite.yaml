@@ -1,0 +1,54 @@
+actions:
+- name: kubectl smoke test
+  bashTest:
+    script: kubectl version
+    expect:
+      exitCode:
+        equals: 0
+- name: Wait for the controller to get ready
+  bashTest:
+    script: kubectl wait --for=condition=Available=True --timeout=180s --namespace $NAMESPACE deploy app-director-operator
+    expect:
+      exitCode:
+        equals: 0
+- name: Create test agent
+  bashTest:
+    script: |
+      kubectl apply --namespace $NAMESPACE -f - <<EOF
+      apiVersion: appdirector.randoli.ca/v1beta1
+      kind: AppDirectorAgent
+      metadata:
+        name: appdir-agent-test
+      spec:
+        managedNamespaces:
+         - app-director
+        agentCertsSecretName: appdir-agent-certs
+        agentConfigSecretName: appdir-agent-secret
+      EOF
+    expect:
+      exitCode:
+        equals: 0
+- name: Check agent deployment
+  bashTest:
+    script: kubectl wait --for=condition=Ready --namespace $NAMESPACE --timeout=120s appdirectoragents appdir-agent-test
+    expect:
+      exitCode:
+        equals: 0
+- name: Delete agent
+  bashTest:
+    script: |
+      kubectl delete --namespace ${NAMESPACE} -f - <<EOF
+      apiVersion: appdirector.randoli.ca/v1beta1
+      kind: AppDirectorAgent
+      metadata:
+        name: appdir-agent-test
+      spec:
+        managedNamespaces:
+         - app-director
+        agentCertsSecretName: appdir-agent-certs
+        agentConfigSecretName: appdir-agent-secret
+      EOF
+    expect:
+      exitCode:
+        equals: 0
+

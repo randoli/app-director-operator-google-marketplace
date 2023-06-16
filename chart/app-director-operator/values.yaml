@@ -1,0 +1,34 @@
+image:
+  # registry: docker.io
+  repository: null
+  tag: null
+  digest: ""
+  pullPolicy: Always
+
+imagePullSecrets: []
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 150Mi
+  requests:
+    cpu: 100m
+    memory: 20Mi
+
+securityContext:
+  fsGroup: 1000
+  runAsUser: 1000
+  runAsNonRoot: true
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+
+labels: {}
+
+deploymentAnnotations: {}
+
+appDirector:
+  serviceAccount: null
+
+kubeRbacProxy:
+  image: null
